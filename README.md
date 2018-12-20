@@ -26,4 +26,6 @@ Naji Bul Hoir - 1731710089
 
 
 ## Progres On Going
-- **_Associating image with user_**
+-**_Associating image with user_**
+
+- **_Masih mencari cara bagaimana menggabungkan angularfire dengan firebase_**
