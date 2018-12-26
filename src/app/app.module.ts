@@ -17,12 +17,18 @@ import {RouteGuard} from './auth/route-guard';
 
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireModule } from 'angularfire2';
+import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { environment } from '../environments/environment';
 import { NotificationComponent } from './notification/notification.component';
 import { NotificationService } from './shared/notification.service';
 import {MyFireService} from './shared/myfire.service';
 import {UserService} from './shared/user.service';
+import {HttpClient, HttpClientModule} from '@angular/common/http';
+import {FormUploadComponent} from './upload/form-upload/form-upload.component';
+import {DetailsUploadComponent} from './upload/details-upload/details-upload.component';
+import {ListUploadComponent} from './upload/list-upload/list-upload.component';
+import {PostComponent} from './shared/post/post.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +41,10 @@ import {UserService} from './shared/user.service';
     SignUpComponent,
     LoginComponent,
     HomeComponent,
+    FormUploadComponent,
+    DetailsUploadComponent,
+    ListUploadComponent,
+    PostComponent,
     NotificationComponent
   ],
   imports: [
@@ -42,8 +52,9 @@ import {UserService} from './shared/user.service';
     AppRoutingModule,
     FormsModule,
     HttpModule,
-    AngularFireModule.initializeApp(environment),
-    AngularFireAuthModule
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireDatabaseModule,
+    HttpClientModule
 
   ],
   providers:

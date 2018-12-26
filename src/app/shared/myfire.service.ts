@@ -32,7 +32,7 @@ export class MyFireService {
 
   uploadFile(file){
     const  fileName = this.generateRandomNme();
-    const fileRef = firebase.storage().ref().child('image/' + file.name);
+    const fileRef = firebase.storage().ref().child('uploads/' + file.name);
     const uploadTask = fileRef.put(file);
 
     return new Promise((resolve, reject) => {
@@ -50,29 +50,51 @@ export class MyFireService {
 
   }
 
+
+
   handleImageUpload(data){
-    const user = this.user.getProfile();
 
-
-
-    const newPersonalPostKey = firebase.database().ref().child('myposts/').push().key;
-    // newPersonalPostKey.set({
-    //   fileUrl: data.fileUrl,
-    //   name: data.fileName,
-    //   creationDate: new Date().toString()
-    // });
     const personalPostDetails = {
       fileUrl: data.fileUrl,
       name: data.fileName,
       creationDate: new Date().toString()
     };
 
-
+    const newPersonalPostKey = firebase.database().ref().child('uploads/').push().key;
     const updates = {};
-    updates['/myposts/' + user.uid + "/" + newPersonalPostKey] = personalPostDetails;
+
+
+    const users = this.user.getProfile();
+    updates['/uploads/'  + users.uid + "/" + newPersonalPostKey ] = personalPostDetails;
 
     return firebase.database().ref().update(updates);
   }
+  getUserPostsRef(uid) {
+    return firebase.database().ref('myposts').child(uid);
+  }
 
+  handleFavoriteClicked(imageData) {
+
+    const uid = firebase.auth().currentUser.uid;
+
+    const updates = {};
+
+    updates['/images/' + imageData.name + "/oldFavoriteCount"] = imageData.favoriteCount;
+    updates['/images/' + imageData.name + "/favoriteCount"] = imageData.favoriteCount + 1;
+    updates['/favorites/' + uid + "/" + imageData.name] = imageData;
+
+    return firebase.database().ref().update(updates);
+
+  }
+
+  followUser(uploadedByUser) {
+    const uid = firebase.auth().currentUser.uid;
+
+    const updates = {};
+    updates['/follow/' + uid + "/" + uploadedByUser.uid] = true;
+
+    return firebase.database().ref().update(updates);
+
+  }
 
 }
